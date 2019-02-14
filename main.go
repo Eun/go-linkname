@@ -2,18 +2,33 @@ package main
 
 import (
 	"fmt"
+	_ "strings"
 	"time"
 	_ "unsafe"
 )
 
-//go:linkname isLeap time.isLeap
-func isLeap(year int) bool
+//go:linkname TimeIsLeap time.isLeap
+func TimeIsLeap(year int) bool
 
-//go:linkname abs time.Time.abs
-func abs(t time.Time) uint64
+//go:linkname TimeTimeAbs time.Time.abs
+func TimeTimeAbs(t time.Time) uint64
+
+//go:linkname StringsStringFinder strings.stringFinder
+type StringsStringFinder struct {
+	pattern        string
+	badCharSkip    [256]int
+	goodSuffixSkip []int
+}
+
+//go:linkname StringsMakeStringFinder strings.makeStringFinder
+func StringsMakeStringFinder(pattern string) *StringsStringFinder
 
 func main() {
+	fmt.Println(TimeIsLeap(2000))
+
 	t := time.Now()
-	fmt.Println(abs(t))
-	fmt.Println(isLeap(2000))
+	fmt.Println(TimeTimeAbs(t))
+
+	finder := StringsMakeStringFinder("Hello")
+	fmt.Printf("%#v", finder)
 }
